@@ -248,18 +248,21 @@ public class FortifyParser {
      * 2.) short operator.
      * Used for sorting the results of the Help command.
      */
-    private static Comparator<Option> HelpComparator = (o1, o2) -> {
-        String required1 = o1.isRequired() ? "1" : "0";
-        String required2 = o2.isRequired() ? "1" : "0";
+    private static Comparator<Option> HelpComparator = new Comparator<Option>() {
+        @Override
+        public int compare(Option o1, Option o2) {
+            String required1 = o1.isRequired() ? "1" : "0";
+            String required2 = o2.isRequired() ? "1" : "0";
 
-        int result = required2.compareTo(required1);
-        if (result == 0) {
-            // will try to sort by short Operator but if it doesn't exist then it'll use long operator
-            String comp1 = o1.getOpt() == null ? o1.getLongOpt() : o1.getOpt();
-            String comp2 = o2.getOpt() == null ? o2.getLongOpt() : o2.getOpt();
+            int result = required2.compareTo(required1);
+            if (result == 0) {
+                // will try to sort by short Operator but if it doesn't exist then it'll use long operator
+                String comp1 = o1.getOpt() == null ? o1.getLongOpt() : o1.getOpt();
+                String comp2 = o2.getOpt() == null ? o2.getLongOpt() : o2.getOpt();
 
-            result = comp1.compareToIgnoreCase(comp2);
+                result = comp1.compareToIgnoreCase(comp2);
+            }
+            return result;
         }
-        return result;
     };
 }
